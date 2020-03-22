@@ -33,6 +33,7 @@ mov ax, sectors_error_msg
 call print_string_nl
 
 disk_loop:
+popa
 jmp $
 
 disk_error_msg: db "DISK ERROR", 0

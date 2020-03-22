@@ -1,5 +1,6 @@
 [org 0x7c00]
 KERNEL_OFFSET equ 0x1000
+_start:
     mov [BOOT_DRIVE], dl
     mov bp, 0x9000 ; set the stack
     mov sp, bp
@@ -12,11 +13,11 @@ KERNEL_OFFSET equ 0x1000
     jmp $
 
 
-    %include "disk_load.asm"
-    %include "16_bit_real_mode_standart_lib.asm"
-    %include "32_bit_protected_mode_standart_lib.asm"
-    %include "32_bit_switch.asm"
-    %include "gdt.asm"
+    %include "boot/disk_load.asm"
+    %include "boot/16_bit_real_mode_standart_lib.asm"
+    %include "boot/32_bit_protected_mode_standart_lib.asm"
+    %include "boot/32_bit_switch.asm"
+    %include "boot/gdt.asm"
 
 
 [bits 16]
