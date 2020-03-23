@@ -2,8 +2,6 @@
 ; .global print_string
 ; .global print_hex
 ; .global print_decimal
-; .global print_decimal_number_function
-; .global calculate_exponential
 ; .global print_nl
 
 print_string: ; parameters are stored in ax as char*
@@ -108,70 +106,6 @@ pop bx
 pop ax
 ret
 
-demsg: db "Called",0
-
-; print_decimal:
-; push eax
-; push ebx
-; push ecx
-; push edx
-;
-; xor ecx,ecx
-; mov ebx, 10
-; print_decimal_loop:
-; xor edx,edx
-; idiv ebx
-; cmp eax, 0
-; je last_digit
-; inc ecx
-; push edx
-; jmp print_decimal_loop
-;
-; last_digit:
-; mov bl,dl
-; call print_decimal_number_function
-;
-; printing_loop:
-; cmp ecx, 0
-; je print_decimal_end
-; pop edx
-; mov bl, dl
-; call print_decimal_number_function
-; dec ecx
-; jmp printing_loop
-;
-; print_decimal_end:
-; pop edx
-; pop ecx
-; pop ebx
-; pop eax
-
-
-; give_digit_numbers:
-; push ebx
-; push ecx
-; push edx
-; xor ecx, ecx
-; cmp eax, 0
-; je give_digit_numbers_end
-; inc ecx
-; mov ebx,10
-;
-; give_digit_numbers_loop:
-; xor edx,edx
-; div ebx
-; inc ecx
-; cmp eax, 1
-; je give_digit_numbers_end
-; jmp give_digit_numbers_loop
-;
-; give_digit_numbers_end:
-; mov eax,ecx
-; pop edx
-; pop ecx
-; pop ebx
-; ret
-
 print_nl:
     pusha
 
@@ -187,18 +121,3 @@ print_nl:
 print_string_nl:
     call print_string
     call print_nl
-; if needed you can use this, but you didnt test it, if it works right
-; calculate_exponential: ; eax -> a ebx -> b ===> a^b
-; push ebx
-; push edx
-;
-; calculate_exponential_loop:
-; cmp ebx, 0
-; je calculate_exponential_end
-; imul eax
-; jmp calculate_exponential_loop
-;
-; calculate_exponential_end:
-; pop edx
-; pop ebx
-; ret

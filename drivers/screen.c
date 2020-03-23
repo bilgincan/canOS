@@ -3,7 +3,7 @@
 
 int get_cursor_offset();
 void set_cursor_offset(int offset);
-int print_char(char c, int col, int row, char attr);
+void print_char(char c, int col, int row, char attr);
 int get_offset(int col, int row);
 int get_offset_row(int offset);
 int get_offset_col(int offset);
@@ -42,8 +42,12 @@ int get_cursor_offset() {
     return offset * 2; /* Position * size of character cell */
 }
 
+int main_col;
+int main_row;
 void kprint_at(char *message, int col, int row) {
     /* Set cursor if col/row are negative */
+    main_col = col;
+    main_row = row;
     int offset;
     if (col >= 0 && row >= 0)
         offset = get_offset(col, row);
@@ -56,13 +60,16 @@ void kprint_at(char *message, int col, int row) {
     /* Loop through message and print it */
     int i = 0;
     while (message[i] != 0) {
-        offset = print_char(message[i++], col, row, WHITE_ON_BLACK);
+      if(message[i] == '\n' || row == MAX_ROWS) {
+        col = main_col;
+        row++;
+      }else{
+        print_char(message[i], col, row, WHITE_ON_BLACK);
         /* Compute row/col for next iteration */
-        //row = get_offset_row(offset);
         col++;
-        // if(message[i] == '\n'){
-        //   row++;
-        // }
+      }
+
+        i++;
     }
 }
 
@@ -70,7 +77,7 @@ void kprint(char *message) {
     kprint_at(message, -1, -1);
 }
 
-int print_char(char c, int col, int row, char attr) {
+void print_char(char c, int col, int row, char attr) {
     unsigned char *vidmem = (unsigned char*) VIDEO_ADDRESS;
     if (!attr) attr = WHITE_ON_BLACK;
 
@@ -78,23 +85,16 @@ int print_char(char c, int col, int row, char attr) {
     if (col >= MAX_COLS || row >= MAX_ROWS) {
         vidmem[2*(MAX_COLS)*(MAX_ROWS)-2] = 'E';
         vidmem[2*(MAX_COLS)*(MAX_ROWS)-1] = RED_ON_WHITE;
-        return get_offset(col, row);
     }
 
     int offset;
     if (col >= 0 && row >= 0) offset = get_offset(col, row);
     else offset = get_cursor_offset();
 
-    if (c == '\n') {
-        row = get_offset_row(offset);
-        offset = get_offset(0, row+1);
-    } else {
         vidmem[offset] = c;
         vidmem[offset+1] = attr;
         offset += 2;
-    }
     set_cursor_offset(offset);
-    return offset;
 }
 
 int get_offset(int col, int row) { return 2 * (row * MAX_COLS + col); }
