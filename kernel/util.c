@@ -13,7 +13,7 @@ void int_to_ascii(int n, char str[]){
   if(n < 0){
     sign = -1;
     //two-compliment of the n if it is negative
-    n = (!n) + 1;
+    n = -n;
   }
   do{
     str[i++] = (n % 10) + '0';
@@ -23,18 +23,16 @@ void int_to_ascii(int n, char str[]){
     str[i++] = '-';
   }
     str[i--] = 0; //-1, because I dont want to reverse the (0 char) -> end of the string
-    char tmp[] = {0};
     int j = 0;
+    int g = i / 2;
 
-  for(i; i >= 0; i--){
-    tmp[j] = str[i];
-    j++;
+    char start;
+    char end;
+
+  while(i >= g && i != j){
+    start = str[j];
+    end = str[i];
+    str[j++] = end;
+    str[i--] = start;
   }
-  str = tmp;
-}
-
-void print_int(int n){
-  char str[20];
-  int_to_ascii(n, str);
-  kprint(str);
 }
