@@ -1,11 +1,11 @@
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c)
+HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h)
 # $@ = target file
 # $< = first dependency
 # $^ = all dependencies
-OBJ = ${C_SOURCES:.c=.o}
+OBJ = ${C_SOURCES:.c=.o cpu/interrupt.o}
 
-CFLAGS = -m32
+CFLAGS = -m32 -ffreestanding -c
 
 # First rule is the one executed when no parameters are fed to the Makefile
 all: run
@@ -31,7 +31,7 @@ os-image.bin: bootsect.bin kernel.bin
 	cat $^ > $@
 
 run: os-image.bin
-	qemu-system-i386 -fda $<
+	qemu-system-i386 -drive format=raw,file=os-image.bin
 
 kernel.elf: boot/kernel_entry.o ${OBJ}
 		ld -m elf_i386 -o $@ -Ttext 0x1000 $^
@@ -41,7 +41,7 @@ debug: os-image.bin kernel.elf
 	gdb -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
 %.o: %.c ${HEADERS}
-		gcc ${CFLAGS} -ffreestanding -c $< -o $@
+		gcc ${CFLAGS} $< -o $@
 
 %.o: %.asm
 		nasm $< -f elf -o $@
@@ -49,7 +49,6 @@ debug: os-image.bin kernel.elf
 %.bin: %.asm
 		nasm $< -f bin -o $@
 
-
 clean:
-	rm -rf *.bin *.dis *.o os-image.bin *.elf
-	rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o
+		rm -rf *.bin *.dis *.o os-image.bin *.elf
+		rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o cpu/*.o

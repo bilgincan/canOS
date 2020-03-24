@@ -1,6 +1,5 @@
 [bits 16]
 disk_load:
-pusha
 push dx
 
 mov ah, 0x02 ; BIOS read mode
@@ -16,7 +15,6 @@ jc disk_error
 pop dx
 cmp dh,al
 jne sectors_error
-popa
 ret
 
 disk_error:
@@ -33,7 +31,6 @@ mov ax, sectors_error_msg
 call print_string_nl
 
 disk_loop:
-popa
 jmp $
 
 disk_error_msg: db "DISK ERROR", 0

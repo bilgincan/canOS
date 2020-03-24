@@ -1,8 +1,11 @@
 #include "../drivers/screen.h"
+#include "util.h"
+#include "../cpu/isr.h"
+#include "../cpu/idt.h"
 
 void main() {
-    char *kernel_msg = "Hello World!\n Hello Kernel!";
-    //char* a = 'a';
-    //clear_screen();
-    kprint(kernel_msg);
+    isr_install();
+    /* Test the interrupts */
+    __asm__ __volatile__("int $0");
+    __asm__ __volatile__("int $3");
 }

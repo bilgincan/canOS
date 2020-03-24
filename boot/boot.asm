@@ -9,7 +9,7 @@ _start:
     call print_string_nl
 
     call load_kernel
-    call switch_to_pm
+    jmp switch_to_pm
     jmp $
 
 
@@ -26,7 +26,7 @@ load_kernel:
     call print_string_nl
 
     mov bx, KERNEL_OFFSET
-    mov dh, 2
+    mov dh, 17
     mov dl, [BOOT_DRIVE]
     call disk_load
     ret

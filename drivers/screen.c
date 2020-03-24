@@ -1,5 +1,6 @@
 #include "screen.h"
 #include "ports.h"
+#include "../kernel/util.h"
 
 int get_cursor_offset();
 void set_cursor_offset(int offset);
@@ -46,8 +47,6 @@ int main_col;
 int main_row;
 void kprint_at(char *message, int col, int row) {
     /* Set cursor if col/row are negative */
-    main_col = col;
-    main_row = row;
     int offset;
     if (col >= 0 && row >= 0)
         offset = get_offset(col, row);
@@ -56,12 +55,13 @@ void kprint_at(char *message, int col, int row) {
         row = get_offset_row(offset);
         col = get_offset_col(offset);
     }
-    //int col_internal = col;
+    // main_col = col;
+    // main_row = row;
     /* Loop through message and print it */
     int i = 0;
     while (message[i] != 0) {
       if(message[i] == '\n' || row == MAX_ROWS) {
-        col = main_col;
+        col = 0;
         row++;
       }else{
         print_char(message[i], col, row, WHITE_ON_BLACK);
@@ -94,6 +94,21 @@ void print_char(char c, int col, int row, char attr) {
         vidmem[offset] = c;
         vidmem[offset+1] = attr;
         offset += 2;
+        /* Check if the offset is over screen size and scroll */
+   // if (offset >= MAX_ROWS * MAX_COLS * 2) {
+   //     int i;
+   //     for (i = 1; i < MAX_ROWS; i++)
+   //         memory_copy(get_offset(0, i) + VIDEO_ADDRESS,
+   //                     get_offset(0, i-1) + VIDEO_ADDRESS,
+   //                     MAX_COLS * 2);
+   //
+   //     /* Blank last line */
+   //     char *last_line = get_offset(0, MAX_ROWS-1) + VIDEO_ADDRESS;
+   //     for (i = 0; i < MAX_COLS * 2; i++) last_line[i] = 0;
+   //
+   //     offset -= 2 * MAX_COLS;
+   // }
+
     set_cursor_offset(offset);
 }
 
