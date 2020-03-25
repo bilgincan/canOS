@@ -1,5 +1,5 @@
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c libc/*.c)
+HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h libc/*.h)
 # $@ = target file
 # $< = first dependency
 # $^ = all dependencies
@@ -51,4 +51,4 @@ debug: os-image.bin kernel.elf
 
 clean:
 		rm -rf *.bin *.dis *.o os-image.bin *.elf
-		rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o cpu/*.o
+		rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o cpu/*.o libc/*.o
