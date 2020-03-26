@@ -138,8 +138,14 @@ void clear_screen() {
 }
 
 void print_int_to_screen(u32 n){
-  char str[512];
+  char str[512] = {0};
   int_to_ascii(n, str);
+  kprint(str);
+}
+
+void print_hex_to_screen(u32 n){
+  char str[512] = {0};
+  hex_to_ascii(n, str);
   kprint(str);
 }
 

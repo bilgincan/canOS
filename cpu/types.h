@@ -1,6 +1,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+
 /* Instead of using 'chars' to allocate non-character bytes,
  * we will use these new type with no semantic meaning */
 typedef unsigned int   u32;

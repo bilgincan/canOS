@@ -100,7 +100,7 @@ char *exception_messages[] = {
     "Coprocessor Fault",
     "Alignment Check",
     "Machine Check",
-    "Reserved",
+    "Null Pointer Exception",
     "Reserved",
     "Reserved",
     "Reserved",

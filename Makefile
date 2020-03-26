@@ -1,5 +1,5 @@
-C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c libc/*.c)
-HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h libc/*.h)
+C_SOURCES = $(wildcard kernel/*.c drivers/*.c cpu/*.c libc/*.c OS-relavent/*.c)
+HEADERS = $(wildcard kernel/*.h drivers/*.h cpu/*.h libc/*.h OS-relavent/*.h)
 # $@ = target file
 # $< = first dependency
 # $^ = all dependencies
@@ -37,7 +37,7 @@ kernel.elf: boot/kernel_entry.o ${OBJ}
 		ld -m elf_i386 -o $@ -Ttext 0x1000 $^
 
 debug: os-image.bin kernel.elf
-	qemu-system-i386 -s -fda os-image.bin &
+	qemu-system-x64_86 -s -fda os-image.bin &
 	gdb -ex "target remote localhost:1234" -ex "symbol-file kernel.elf"
 
 %.o: %.c ${HEADERS}
@@ -51,4 +51,4 @@ debug: os-image.bin kernel.elf
 
 clean:
 		rm -rf *.bin *.dis *.o os-image.bin *.elf
-		rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o cpu/*.o libc/*.o
+		rm -rf kernel/*.o boot/*.bin drivers/*.o boot/*.o cpu/*.o libc/*.o OS-relavent/*.o
