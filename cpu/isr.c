@@ -78,8 +78,8 @@ void isr_install() {
 }
 
 /* To print the message which defines every exception */
-char *exception_messages[] = {
-    "Division By Zero",
+char* exception_messages[] = {
+    "Division By Zero"
     "Debug",
     "Non Maskable Interrupt",
     "Breakpoint",
@@ -101,7 +101,7 @@ char *exception_messages[] = {
     "Alignment Check",
     "Machine Check",
     "Null Pointer Exception",
-    "Reserved",
+    "Process Exception",
     "Reserved",
     "Reserved",
     "Reserved",
@@ -122,7 +122,7 @@ void isr_handler(registers_t r) {
     int_to_ascii(r.int_no, s);
     kprint(s);
     kprint("\n ");
-    kprint(exception_messages[r.int_no]);
+    print(exception_messages[r.int_no]);
     kprint("\n ");
 }
 

@@ -249,7 +249,7 @@ isr19:
     push byte 19
     jmp isr_common_stub
 
-; 20: Reserved
+; 20: Process Exception
 isr20:
     cli
     push byte 0

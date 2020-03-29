@@ -7,6 +7,7 @@
 #include "../cpu/idt.h"
 #include "start_up.h"
 #include "../libc/basic_structs.h"
+#include "../OS-relavent/process.h"
 
 void kernel_main() {
     clear_screen();
@@ -14,19 +15,16 @@ void kernel_main() {
     irq_install();
 
     print("DEBUG MODE:\n");
-    struct list l = init_list();
+    init_scheduler();
 
-    for(u32 i = 0; i < 6; i++){
-      add(i, &l);
-    }
-    print("\n");
-    printList(&l);
-    print_int(size_list(&l));
-    print("\n");
-    print_int(get(3,&l));
-    print("\n");
-    remove(4,&l);
-    printList(&l);
+    struct process_t test = {READY, 0x10, 2, 2, 1, 1, null, "test"};
+    start_new_process(&test);
+
+    debug_info();
+
+    block_process(&test);
+
+    debug_info();
 
     // print("Hello World! \nHello Kernel!\n\n");
     //

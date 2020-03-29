@@ -6,11 +6,13 @@
 struct list* find_end_of_list(struct list* l);
 struct list* find_list(int i, struct list* l);
 
-struct list init_list(){
+struct list* init_list(){
   //initilize, I didnt understand how this worked but it works
   struct list* pointer = (struct list*) kmalloc(12,0,null);
-  struct list l = {NULL, NULL,NULL};
-  return l;
+  pointer->begin = NULL;
+  pointer->value = NULL;
+  pointer->next = NULL;
+  return pointer;
 }
 //*************************************************
 //** be sure if you need to use kmalloc in mem.c **
@@ -61,8 +63,13 @@ u32 get(int i, struct list* l){
 
 //dont forget to write free, after you implement kfree function
 struct list* remove(int i, struct list* l){
+  if(i == 0){
+    kfree(12,0,l->begin);
+    l->begin = l->next;
+    return l;
+  }
   struct list* m = find_list(i-1,l);
-  //free(m->next);
+  kfree(12,0,m->next);
   m->next = m->next->next;
   return l;
 }
@@ -71,8 +78,8 @@ struct list* find_list(int i, struct list* l){
   int size = size_list(l);
   if(i > size){
     //an exception can be thrown here
-    print("There is no such a element, return value dummy");
-    return l;
+    __asm__("int $5");
+    return null;
   }else{
     for(int j = 0; j < i; j++){
       l = l->next;
@@ -104,4 +111,33 @@ struct list* find_end_of_list(struct list* l){
     l = l->next;
   }
   return l;
+}
+
+enum boolean contains(u32 n, struct list* list){
+  if(list == NULL){
+    __asm__("int $19");
+    return null;
+  }
+  int size = size_list(list);
+
+  while(list != NULL){
+    u32 val = list->value;
+    if(val == n) return TRUE;
+    else list = list->next;
+  }
+  return FALSE;
+}
+
+int find_index_by_value(u32 n, struct list* l){
+  if(contains(n, l) == FALSE){
+    return -1;
+  }else{
+    int i = 0;
+    while(l != NULL){
+      u32 val = l->value;
+      if(val == n) return i;
+      i++;
+    }
+  }
+  return -1;
 }
