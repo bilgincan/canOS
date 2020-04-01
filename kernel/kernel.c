@@ -7,29 +7,23 @@
 #include "../cpu/idt.h"
 #include "start_up.h"
 #include "../libc/basic_structs.h"
-#include "../OS-relavent/process.h"
+#include "../OS-relavent/scheduler.h"
 
 void kernel_main() {
     clear_screen();
     isr_install();
     irq_install();
-
-    print("DEBUG MODE:\n");
+    init_timer(500);
     init_scheduler();
 
-    struct process_t test = {READY, 0x10, 2, 2, 1, 1, null, "test"};
-    start_new_process(&test);
+    struct process_t* timer = create_new_process("kernel_timer", 4, 1, 1, 15);
+    start_new_process(timer);
 
-    debug_info();
 
-    block_process(&test);
+    print("Hello World! \nHello Kernel!\n\n");
 
-    debug_info();
-
-    // print("Hello World! \nHello Kernel!\n\n");
-    //
-    // print("canOS is ready for your instructions\n");
-    // next_order();
+    print("canOS is ready for your instructions\n");
+    next_order();
 }
 
 void user_input(char *input) {

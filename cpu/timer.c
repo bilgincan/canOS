@@ -4,8 +4,9 @@
 #include "isr.h"
 #include "../drivers/ports.h"
 #include "../libc/function.h"
+#include "../OS-relavent/scheduler.h"
 
-u32 tick = 0;
+unsigned int tick = 0;
 
 static void timer_callback(registers_t regs){
   tick++;
@@ -25,4 +26,12 @@ void init_timer(u32 freq){
    port_byte_out(0x43, 0x36); /* Command port */
    port_byte_out(0x40, low);
    port_byte_out(0x40, high);
+}
+
+void inc_tick(){
+ tick++;
+}
+
+unsigned int get_tick(){
+  return tick;
 }

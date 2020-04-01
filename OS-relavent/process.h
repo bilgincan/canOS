@@ -25,4 +25,4 @@ struct thread_t{
 
 
 struct process_t* init_process();
-struct process_t* create_new_process(char* process_name);
+struct process_t* create_new_process(char* process_name, u32 size_in_memory, u32 ppid, u32 gpid, u32 priority);

@@ -1,6 +1,7 @@
 #include "start_up.h"
 #include "../libc/string.h"
 #include "kernel.h"
+#include "../cpu/timer.h"
 
 void proccess_command(char* command){
   if (strcmp(command, "end") == 0) {
@@ -11,10 +12,14 @@ void proccess_command(char* command){
       int command_length = strlen("echo");
       command += command_length;
       print(command);
-      next_order();
+  }
+  else if(strcmp(command,"show timer") == 0){
+    unsigned int time = get_tick();
+    print("System time: ");
+    print_int(time);
   }
   else{
     print("There is no such a command!!!");
-    next_order();
   }
+  next_order();
 }
